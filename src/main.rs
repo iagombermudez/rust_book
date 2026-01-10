@@ -1,8 +1,9 @@
-struct Point(i32, i32, i32);
+use std::collections::HashMap;
 
 fn main() {
-    let origin = Point(1, 2, 3);
-    let Point(x, y, z) = origin;
-    println!("{x} {y} {z}")
-} // Here, x goes out of scope, then s. However, because s's value was moved,
-// nothing special happens.
+    let mut map = HashMap::new();
+    for word in "Hello this is a literal hello this".split_whitespace() {
+        let count = map.entry(word).or_insert(0);
+        *count += 1;
+    }
+}
