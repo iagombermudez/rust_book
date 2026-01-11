@@ -54,4 +54,57 @@ fn main() {
     let mut word = String::from("apple");
     let piglatin = ip_latinpay_ordway(&mut word);
     println!("{piglatin}");
+
+    // Using a hash map and vectors, create a text interface to allow
+    // a user to add employee names to a department in a company; for
+    // example, “Add Sally to Engineering” or “Add Amir to Sales.”
+    // Then, let the user retrieve a list of all people in a department
+    // or all people in the company by department, sorted alphabetically.
+    struct Company {
+        departments: HashMap<String, Vec<String>>,
+    }
+
+    impl Company {
+        pub fn new() -> Self {
+            Self {
+                departments: HashMap::new(),
+            }
+        }
+        fn add_employee(&mut self, name: &str, department: &str) {
+            let people = self
+                .departments
+                .entry(department.to_string())
+                .or_insert_with(Vec::new);
+            people.push(name.to_string());
+        }
+
+        fn get_by_department(&self, department: &str) {
+            let people = self.departments.get(department);
+            match people {
+                Some(people) => {
+                    println!("People in department {department}");
+                    for person in people {
+                        println!("{person}");
+                    }
+                }
+                None => println!("Department {department} does not exist"),
+            }
+        }
+
+        fn get_all(&self) {
+            for (department, _) in &self.departments {
+                self.get_by_department(&department[..]);
+            }
+        }
+    }
+
+    let mut company = Company::new();
+    company.add_employee("Sally", "Finance");
+    company.add_employee("Cory", "Finance");
+    company.add_employee("Anthony", "Business");
+    company.add_employee("Mark", "Finance");
+    company.get_by_department("Finance");
+    company.get_by_department("Business");
+    company.get_by_department("Marketing");
+    company.get_all();
 }
